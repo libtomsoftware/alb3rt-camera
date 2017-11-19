@@ -6,6 +6,6 @@ module.exports = new class Alb3rtSecuritySlaveRecord {
     constructor() {}
 
     trigger(data) {
-        logger.log(FILE_ID, 'recording triggered');
+        logger.log(FILE_ID, `recording triggered ${data}`);
     }
 };
