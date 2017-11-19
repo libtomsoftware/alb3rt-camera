@@ -1,8 +1,8 @@
 const core = require('alb3rt-core'),
-    record = require('./resources/record');
+    on = require('./resources/on');
 
 module.exports = new class Alb3rtCameraApi {
     constructor() {
-        core.api.extend('record', record);
+        core.api.extend('on', on);
     }
 };

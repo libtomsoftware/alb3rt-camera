@@ -1,13 +1,11 @@
 const core = require('alb3rt-core'),
-    record = require('../../record'),
+    handlers = require('../../handlers'),
     CONFIG = core.config,
     STATUS_CODE = CONFIG.CONSTANTS.HTTP_CODE;
 
-module.exports = new class Alb3rtCameraResourcesRecord {
-    constructor() {}
-
+module.exports = new class Alb3rtCameraResourcesOff {
     post(request, response) {
-        record.trigger(request.body);
+        handlers.off(request.body);
 
         core.api.responder.send(response, {
             status: STATUS_CODE.OK
