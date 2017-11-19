@@ -36,6 +36,6 @@ if modulesAvailable == True:
     convertCommand = './scripts/bash/convert.sh ' + filename
     subprocess.call(shlex.split(convertCommand))
 
-    requestUrl = 'http://127.0.0.1:4004/api/off
+    requestUrl = 'http://127.0.0.1:4004/api/off'
     data = {"filename": filename}
     response = requests.post(requestUrl, json=data)
