@@ -1,4 +1,5 @@
 const FILE_ID = 'state',
+    fs = require('fs-extra'),
     core = require('alb3rt-core'),
     python = core.python,
     http = core.http,
