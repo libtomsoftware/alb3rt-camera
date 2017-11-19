@@ -3,7 +3,8 @@ const FILE_ID = 'state',
     core = require('alb3rt-core'),
     python = core.python,
     http = core.http,
-    logger = core.logger;
+    logger = core.logger
+    CONFIG = core.config;
 
 module.exports = new class Alb3rtCameraHandlers {
     constructor() {
@@ -17,37 +18,37 @@ module.exports = new class Alb3rtCameraHandlers {
         logger.log(FILE_ID, 'camera on');
 
         if (!this.pyshell) {
-            console.log(FILE_ID, 'No camera running, turning on...');
+            logger.log(FILE_ID, 'No camera running, turning on...');
 
             fs.ensureDir('./videos/temp')
                 .catch((videosFolderError) => {
-                    console.log(FILE_ID, 'Error while creating directory ./videos/temp', videosFolderError);
+                    logger.log(FILE_ID, `Error while creating directory ./videos/temp ${videosFolderError}`);
                 });
 
             python.run('camera', pyshell => {
                 this.pyshell = pyshell;
             });
         } else {
-            console.log(FILE_ID, 'An attempt to turn on camera, but it is already running, aborting...');
+            logger.log(FILE_ID, 'An attempt to turn on camera, but it is already running, aborting...');
         }
     }
 
     off(filename) {
         if (this.pyshell) {
-            console.log(FILE_ID, 'Camera running, turning off...');
+            logger.log(FILE_ID, 'Camera running, turning off...');
 
             this.pyshell.childProcess.kill('SIGINT');
             this.pyshell = null;
             python.stop('camera');
 
         } else {
-            console.log(FILE_ID, 'An attempt to turn off camera, but no camera running, aborting...');
+            logger.log(FILE_ID, 'An attempt to turn off camera, but no camera running, aborting...');
         }
 
         if (filename) {
             fs.pathExists('./videos/' + filename + '.mp4', (videoFileError, exists) => {
                 if (!videoFileError && exists) {
-                    console.log(FILE_ID, 'Notifying filemaster about', filename);
+                    logger.log(FILE_ID, `Notifying filemaster about ${filename}`);
 
                     const body = {
                         created: (new Date()).getTime(),
@@ -75,8 +76,10 @@ module.exports = new class Alb3rtCameraHandlers {
             body
         }, (downloadRequestError, res) => {
             if (downloadRequestError || res.statusCode !== 200) {
-                console.log(FILE_ID, 'Error when notifying master about video', filename + ':', res.statusCode);
+                logger.log(FILE_ID, 'Error when notifying filemaster about video', filename + ':', res.statusCode);
             }
+        }).catch(error => {
+            logger.error(FILE_ID, 'Error when notifying filemaster about video', filename + ':', error);
         });
     }
 
