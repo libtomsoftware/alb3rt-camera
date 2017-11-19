@@ -15,8 +15,6 @@ module.exports = new class Alb3rtCameraHandlers {
     }
 
     on() {
-        logger.log(FILE_ID, 'camera on');
-
         if (!this.pyshell) {
             logger.log(FILE_ID, 'No camera running, turning on...');
 
@@ -71,16 +69,18 @@ module.exports = new class Alb3rtCameraHandlers {
     }
 
     notify(filename, body) {
-        http.put({
-            url: CONFIG.URL.FILEMASTER + '/api/downloads/' + filename,
-            body
-        }, (downloadRequestError, res) => {
-            if (downloadRequestError || res.statusCode !== 200) {
-                logger.log(FILE_ID, 'Error when notifying filemaster about video', filename + ':', res.statusCode);
-            }
-        }).catch(error => {
-            logger.error(FILE_ID, 'Error when notifying filemaster about video', filename + ':', error);
-        });
+        console.log('notify filename:', filename);
+        console.log('notify body:', JSON.stringify(body));
+        // http.put({
+        //     url: CONFIG.URL.FILEMASTER + '/api/downloads/' + filename,
+        //     body
+        // }, (downloadRequestError, res) => {
+        //     if (downloadRequestError || res.statusCode !== 200) {
+        //         logger.log(FILE_ID, 'Error when notifying filemaster about video', filename + ':', res.statusCode);
+        //     }
+        // }).catch(error => {
+        //     logger.error(FILE_ID, 'Error when notifying filemaster about video', filename + ':', error);
+        // });
     }
 
     error() {
