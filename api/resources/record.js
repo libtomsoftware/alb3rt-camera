@@ -10,8 +10,7 @@ module.exports = new class Alb3rtCameraResourcesRecord {
         record.trigger(request.body);
 
         core.api.responder.send(response, {
-            status: STATUS_CODE.OK,
-            data: {}
+            status: STATUS_CODE.OK
         });
     }
 };
