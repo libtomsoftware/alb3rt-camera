@@ -13,9 +13,10 @@ try:
 
         modulesAvailable = True
 
-except ImportError:
+except (KeyboardInterrupt, SystemExit):
+        raise
+except:
         print('[alb3rt-camera-event] Error')
-        error = {"type": "import"}
         requests.get('http://127.0.0.1:4004/api/error', verify=False)
 
 if modulesAvailable == True:
@@ -29,12 +30,9 @@ if modulesAvailable == True:
     camera.capture('./videos/%s.jpg' % filename)
     camera.stop_preview()
 
-    camera.start_recording('./videos/temp/%s.h264' % filename)
+    camera.start_recording('./videos/%s.h264' % filename)
     camera.wait_recording(10)
     camera.stop_recording()
-
-    convertCommand = './scripts/bash/convert.sh ' + filename
-    subprocess.call(shlex.split(convertCommand))
 
     requestUrl = 'http://127.0.0.1:4004/api/off/' + filename
     response = requests.get(requestUrl, verify=False)

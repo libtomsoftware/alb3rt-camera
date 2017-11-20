@@ -18,9 +18,9 @@ module.exports = new class Alb3rtCameraHandlers {
         if (!this.pyshell) {
             logger.log(FILE_ID, 'No camera running, turning on...');
 
-            fs.ensureDir('./videos/temp')
+            fs.ensureDir('./videos')
                 .catch((videosFolderError) => {
-                    logger.log(FILE_ID, `Error while creating directory ./videos/temp ${videosFolderError}`);
+                    logger.log(FILE_ID, `Error while creating directory ./videos ${videosFolderError}`);
                 });
 
             python.run('camera', pyshell => {
@@ -35,7 +35,6 @@ module.exports = new class Alb3rtCameraHandlers {
         if (this.pyshell) {
             logger.log(FILE_ID, 'Camera running, turning off...');
 
-            this.pyshell.childProcess.kill('SIGINT');
             this.pyshell = null;
             python.stop('camera');
 
@@ -44,14 +43,19 @@ module.exports = new class Alb3rtCameraHandlers {
         }
 
         if (filename) {
-            fs.pathExists('./videos/' + filename + '.mp4', (videoFileError, exists) => {
+            fs.pathExists('./videos/' + filename + '.h264', (videoFileError, exists) => {
+                if (videoFileError || !exists) {
+                    logger.warn(FILE_ID, `${filename}.h264 doesn't exist, aborting...`);
+                    return;
+                }
+
                 if (!videoFileError && exists) {
                     logger.log(FILE_ID, `Notifying filemaster about ${filename}`);
 
                     const body = {
                         created: (new Date()).getTime(),
                         filepath: '/videos/',
-                        extension: '.mp4',
+                        extension: '.h264',
                         type: 'movie',
                         address: CONFIG.APP.ADDRESS
                     };
@@ -70,6 +74,7 @@ module.exports = new class Alb3rtCameraHandlers {
 
     notify(filename, body) {
         console.log('notify filename:', filename);
+        console.log('notify body:', JSON.stringify(body));
         // http.put({
         //     url: CONFIG.URL.FILEMASTER + '/api/downloads/' + filename,
         //     body
