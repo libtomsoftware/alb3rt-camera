@@ -3,7 +3,7 @@ const FILE_ID = 'state',
     core = require('alb3rt-core'),
     python = core.python,
     http = core.http,
-    logger = core.logger
+    logger = core.logger,
     CONFIG = core.config;
 
 module.exports = new class Alb3rtCameraHandlers {
@@ -70,7 +70,6 @@ module.exports = new class Alb3rtCameraHandlers {
 
     notify(filename, body) {
         console.log('notify filename:', filename);
-        console.log('notify body:', JSON.stringify(body));
         // http.put({
         //     url: CONFIG.URL.FILEMASTER + '/api/downloads/' + filename,
         //     body
