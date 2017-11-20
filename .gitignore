@@ -3,6 +3,7 @@ node_modules
 
 # production
 logs
+videos
 
 # variables
 .env.json
