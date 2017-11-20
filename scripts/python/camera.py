@@ -16,7 +16,7 @@ try:
 except ImportError:
         print('[alb3rt-camera-event] Error')
         error = {"type": "import"}
-        requests.post('http://127.0.0.1:4004/api/error', json=error)
+        requests.get('http://127.0.0.1:4004/api/error', verify=False)
 
 if modulesAvailable == True:
     camera = PiCamera()
@@ -37,4 +37,4 @@ if modulesAvailable == True:
     subprocess.call(shlex.split(convertCommand))
 
     requestUrl = 'http://127.0.0.1:4004/api/off/' + filename
-    response = requests.get(requestUrl)
+    response = requests.get(requestUrl, verify=False)
