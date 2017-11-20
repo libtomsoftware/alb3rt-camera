@@ -4,8 +4,8 @@ const core = require('alb3rt-core'),
     STATUS_CODE = CONFIG.CONSTANTS.HTTP_CODE;
 
 module.exports = new class Alb3rtCameraResourcesOff {
-    post(request, response) {
-        handlers.off(request.body ? request.body.filename : undefined);
+    get(request, response) {
+        handlers.off(request.params.id);
 
         core.api.responder.send(response, {
             status: STATUS_CODE.OK

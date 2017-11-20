@@ -36,13 +36,5 @@ if modulesAvailable == True:
     convertCommand = './scripts/bash/convert.sh ' + filename
     subprocess.call(shlex.split(convertCommand))
 
-    requestUrl = 'http://127.0.0.1:4004/api/off'
-    data = {"filename": filename}
-
-    try:
-        response = requests.post(requestUrl, json=data)
-        if response.status_code == 200:
-            print('[alb3rt-camera] Camera OFF request successfull.')
-    except requests.exceptions.RequestException as error:
-        print('[alb3rt-camera] Camera OFF request error!')
-        print('[alb3rt-sensor] %s') % error
+    requestUrl = 'http://127.0.0.1:4004/api/off/' + filename
+    response = requests.get(requestUrl)
